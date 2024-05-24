@@ -1,6 +1,3 @@
--- modified version of https://github.com/sixolet/nb/blob/main/lib/nb.lua
--- add_player_params() generates a param lookup table for each voice in nb.indices
-
 local mydir = debug.getinfo(1).source:match("@?" .. _path.code .. "(.*/)")
 local player_lib = include(mydir .. "player")
 local nb = {}
@@ -101,6 +98,12 @@ local function add_midi_players()
                             note_mod_targets = { "pressure" },
                             modulate_description = mod_d
                         }
+                    end
+
+                    function player:stop_all(val)
+                        for ch = 1, 16 do -- all channels since init() calls before add_params()
+                            self.conn:cc(120, 1, ch)
+                        end
                     end
 
                     nb.players["midi: " .. abbreviate(v.name) .. " " .. j] = player
