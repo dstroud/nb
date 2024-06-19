@@ -31,7 +31,7 @@ end
 
 -- Implement to do midi-style note-off. This is optional if you implement
 -- play_note instead.
-function player:note_off(note, properties)
+function player:note_off(note, vel, properties)
 end
 
 -- Optional. Send pitch bend to the voice. If the voice doesn't support
@@ -118,7 +118,7 @@ function player:play_note(note, vel, length, properties)
     self:note_on(note, vel, properties)
     clock.run(function()
         clock.sleep(length*clock.get_beat_sec())
-        self:note_off(note, properties)
+        self:note_off(note, 0, properties)
     end)
 end
 
