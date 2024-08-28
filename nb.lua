@@ -51,3 +51,7 @@ function grid_redraw()
     end
     g:refresh()
 end
+
+function cleanup()
+    nb:stop_all()
+end

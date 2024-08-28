@@ -76,7 +76,7 @@ function player:describe()
         supports_slew = false,
         modulate_description = "unsupported",
         note_mod_targets = {},
-        voice_mod_tarets = {},
+        voice_mod_targets = {},
         params = {},
     }
 end

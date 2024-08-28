@@ -2,14 +2,6 @@ local mydir = debug.getinfo(1).source:match("@?" .. _path.code .. "(.*/)")
 local player_lib = include(mydir .. "player")
 local nb = {}
 
-if note_players == nil then
-    note_players = {}
-end
-
--- note_players is a global that you can add note-players to from anywhere before
--- you call nb:add_param.
-nb.players = note_players -- alias the global here. Helps with standalone use.
-
 nb.none = player_lib:new()
 
 -- Set this before init() to affect the number of voices added for some mods.
@@ -92,7 +84,7 @@ local function add_midi_players()
                             mod_d = "cc " .. params:get("midi_modulation_cc_" .. i .. '_' .. j)
                         end
                         return {
-                            name = "v.name",
+                            name = v.name,
                             supports_bend = true,
                             supports_slew = false,
                             note_mod_targets = { "pressure" },
@@ -109,6 +101,14 @@ end
 
 -- Call from your init method.
 function nb:init()
+    if note_players == nil then
+        note_players = {}
+    end
+    
+    -- note_players is a global that you can add note-players to from anywhere before
+    -- you call nb:add_param.
+    nb.players = note_players -- alias the global here. Helps with standalone use.
+
     nb_player_refcounts = {}
     add_midi_players()
     self:stop_all()
@@ -122,7 +122,9 @@ function nb:add_param(param_id, param_name)
     for name, _ in pairs(note_players) do
         table.insert(names, name)
     end
-    table.sort(names)
+    table.sort(names, function(a, b)
+        return string.lower(a) < string.lower(b)
+    end)
     table.insert(names, 1, "none")
     local names_inverted = tab.invert(names)
     params:add_option(param_id, param_name, names, 1)
