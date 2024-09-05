@@ -134,7 +134,7 @@ function nb:add_param(param_id, param_name)
     local p = params:lookup_param(param_id)
     local initialized = false
     function p:get_player()
-        local name = params:get(string_param_id)
+        local name = tostring(params:get(string_param_id))
         if name == "none" then
             if p.player ~= nil then
                 p.player:count_down()
@@ -161,7 +161,7 @@ function nb:add_param(param_id, param_name)
         initialized = true
     end, p)
     params:set_action(string_param_id, function(name_param)
-        local i = names_inverted[params:get(string_param_id)]
+        local i = names_inverted[tostring(params:get(string_param_id))]
         if i ~= nil then
             -- silently set the interface param.
             params:set(param_id, i, true)
